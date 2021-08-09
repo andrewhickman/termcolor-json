@@ -7,3 +7,19 @@
 [dl]: https://docs.rs/termcolor-json/
 
 # termcolor-json
+
+A library for writing colored [JSON](https://crates.io/crates/serde_json) output to a [termcolor](https://crates.io/crates/termcolor) terminal.
+
+```rust
+let stdout = StandardStream::stdout(ColorChoice::Auto);
+
+termcolor_json::to_writer(
+    &mut stdout.lock(),
+    &serde_json::json!({
+        "string": "value",
+        "number": 123,
+        "bool": true,
+        "null": null,
+    }),
+)?;
+```

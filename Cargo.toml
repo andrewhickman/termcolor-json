@@ -1,0 +1,14 @@
+[package]
+name = "termcolor-json"
+description = "termcolor-json."
+version = "0.0.0"
+authors = ["Andrew Hickman <andrew.hickman1@sky.com>"]
+repository = "https://github.com/andrewhickman/termcolor-json"
+documentation = "https://docs.rs/termcolor-json"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+edition = "2018"
+
+[dependencies]
+
+[dev-dependencies]

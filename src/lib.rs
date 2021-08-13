@@ -32,6 +32,8 @@ use serde_json::ser::{CharEscape, CompactFormatter, Formatter, PrettyFormatter, 
 use termcolor::{Color, ColorSpec, WriteColor};
 
 /// Controls the console formatter used for different JSON tokens.
+///
+/// A reasonable default theme is provided by [Theme::default].
 #[derive(Clone, Debug)]
 pub struct Theme {
     null: ColorSpec,
@@ -487,17 +489,18 @@ impl Theme {
 }
 
 impl Default for Theme {
+    /// Get a reasonable default theme.
     fn default() -> Self {
         let mut theme = Theme::none();
 
-        theme.null_mut().set_fg(Some(Color::White)).set_dimmed(true);
-        theme.bool_mut().set_fg(Some(Color::White)).set_dimmed(true);
-        theme.number_mut().set_fg(Some(Color::Cyan)).set_bold(true);
+        theme.null_mut().set_fg(Some(Color::Cyan)).set_bold(true);
+        theme.bool_mut().set_fg(Some(Color::Cyan)).set_bold(true);
+        theme.number_mut().set_fg(Some(Color::Cyan));
         theme.string_mut().set_fg(Some(Color::Green));
         theme
             .object_key_mut()
             .set_fg(Some(Color::Blue))
-            .set_bold(true);
+            .set_intense(true);
 
         theme
     }

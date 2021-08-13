@@ -1,6 +1,6 @@
 [package]
 name = "termcolor-json"
-description = "A library for writing colored [JSON](https://crates.io/crates/serde_json) output to a [termcolor](https://crates.io/crates/termcolor) terminal."
+description = "A library for writing colored JSON output to a termcolor terminal."
 version = "0.1.1"
 authors = ["Andrew Hickman <andrew.hickman1@sky.com>"]
 repository = "https://github.com/andrewhickman/termcolor-json"

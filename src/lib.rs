@@ -85,11 +85,15 @@ where
     T: ?Sized + Serialize,
     F: Formatter,
 {
-    let writer = Writer::new(writer);
-    let formatter = ColorFormatter::new(&writer, theme, formatter);
-    let mut ser = Serializer::with_formatter(&writer, formatter);
-    value.serialize(&mut ser)?;
-    Ok(())
+    if !writer.supports_color() {
+        let mut ser = Serializer::with_formatter(writer, formatter);
+        value.serialize(&mut ser)
+    } else {
+        let writer = Writer::new(writer);
+        let formatter = ColorFormatter::new(&writer, theme, formatter);
+        let mut ser = Serializer::with_formatter(&writer, formatter);
+        value.serialize(&mut ser)
+    }
 }
 
 struct ColorFormatter<'a, W, F> {

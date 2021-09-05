@@ -1,11 +1,13 @@
 [package]
 name = "termcolor-json"
 description = "A library for writing colored JSON output to a termcolor terminal."
-version = "0.1.2"
+version = "0.1.3"
 authors = ["Andrew Hickman <andrew.hickman1@sky.com>"]
 repository = "https://github.com/andrewhickman/termcolor-json"
 documentation = "https://docs.rs/termcolor-json"
 license = "MIT OR Apache-2.0"
+keywords = ["json", "serde", "color", "ansi", "console"]
+categories = ["command-line-interface", "encoding", "value-formatting"]
 readme = "README.md"
 edition = "2018"
 

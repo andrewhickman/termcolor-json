@@ -89,7 +89,7 @@ where
         let mut ser = Serializer::with_formatter(writer, formatter);
         value.serialize(&mut ser)
     } else {
-        let writer = Writer::new(writer);
+        let writer = SharedWriter::new(writer);
         let formatter = ColorFormatter::new(&writer, theme, formatter);
         let mut ser = Serializer::with_formatter(&writer, formatter);
         value.serialize(&mut ser)
@@ -371,19 +371,27 @@ where
     }
 }
 
-struct Writer<W> {
+// serde_json's serializer expects to own its own `Write` implementation, but we need to keep our
+// own reference to it so we can set colors on the stream.
+//
+// We could pass serde_json a dummy implementation like io::Sink and do all the writing ourselves
+// in ColorFormatter, but this is a forwards-compability hazard if new methods are added to Formatter
+// in future which write to the dummy stream by default.
+//
+// Instead we share ownership of the stream between serde_json and this library using a RefCell.
+struct SharedWriter<W> {
     inner: RefCell<W>,
 }
 
-impl<W> Writer<W> {
+impl<W> SharedWriter<W> {
     fn new(writer: W) -> Self {
-        Writer {
+        SharedWriter {
             inner: RefCell::new(writer),
         }
     }
 }
 
-impl<W> Write for &'_ Writer<W>
+impl<W> Write for &'_ SharedWriter<W>
 where
     W: Write,
 {
@@ -404,7 +412,7 @@ where
     }
 }
 
-impl<W> WriteColor for &'_ Writer<W>
+impl<W> WriteColor for &'_ SharedWriter<W>
 where
     W: WriteColor,
 {

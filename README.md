@@ -23,3 +23,5 @@ termcolor_json::to_writer(
     }),
 )?;
 ```
+
+![Sample image](img/sample.png)

@@ -34,9 +34,10 @@ use termcolor::{Color, ColorSpec, WriteColor};
 
 /// Controls the console formatter used for different JSON tokens.
 ///
-/// A reasonable default theme is provided by [Theme::default].
+/// A reasonable default theme is provided by [`Theme::default`].
 #[derive(Clone, Debug)]
 pub struct Theme {
+    reset: ColorSpec,
     null: ColorSpec,
     bool: ColorSpec,
     number: ColorSpec,
@@ -126,7 +127,7 @@ where
     {
         self.writer.set_color(&self.theme.null)?;
         self.formatter.write_null(&mut self.writer)?;
-        self.writer.reset()?;
+        self.writer.set_color(&self.theme.reset)?;
         Ok(())
     }
 
@@ -136,7 +137,7 @@ where
     {
         self.writer.set_color(&self.theme.bool)?;
         self.formatter.write_bool(&mut self.writer, value)?;
-        self.writer.reset()?;
+        self.writer.set_color(&self.theme.reset)?;
         Ok(())
     }
 
@@ -146,7 +147,7 @@ where
     {
         self.writer.set_color(&self.theme.number)?;
         self.formatter.write_i8(&mut self.writer, value)?;
-        self.writer.reset()?;
+        self.writer.set_color(&self.theme.reset)?;
         Ok(())
     }
 
@@ -156,7 +157,7 @@ where
     {
         self.writer.set_color(&self.theme.number)?;
         self.formatter.write_i16(&mut self.writer, value)?;
-        self.writer.reset()?;
+        self.writer.set_color(&self.theme.reset)?;
         Ok(())
     }
 
@@ -166,7 +167,7 @@ where
     {
         self.writer.set_color(&self.theme.number)?;
         self.formatter.write_i32(&mut self.writer, value)?;
-        self.writer.reset()?;
+        self.writer.set_color(&self.theme.reset)?;
         Ok(())
     }
 
@@ -176,7 +177,7 @@ where
     {
         self.writer.set_color(&self.theme.number)?;
         self.formatter.write_i64(&mut self.writer, value)?;
-        self.writer.reset()?;
+        self.writer.set_color(&self.theme.reset)?;
         Ok(())
     }
 
@@ -186,7 +187,7 @@ where
     {
         self.writer.set_color(&self.theme.number)?;
         self.formatter.write_u8(&mut self.writer, value)?;
-        self.writer.reset()?;
+        self.writer.set_color(&self.theme.reset)?;
         Ok(())
     }
 
@@ -196,7 +197,7 @@ where
     {
         self.writer.set_color(&self.theme.number)?;
         self.formatter.write_u16(&mut self.writer, value)?;
-        self.writer.reset()?;
+        self.writer.set_color(&self.theme.reset)?;
         Ok(())
     }
 
@@ -206,7 +207,7 @@ where
     {
         self.writer.set_color(&self.theme.number)?;
         self.formatter.write_u32(&mut self.writer, value)?;
-        self.writer.reset()?;
+        self.writer.set_color(&self.theme.reset)?;
         Ok(())
     }
 
@@ -216,7 +217,7 @@ where
     {
         self.writer.set_color(&self.theme.number)?;
         self.formatter.write_u64(&mut self.writer, value)?;
-        self.writer.reset()?;
+        self.writer.set_color(&self.theme.reset)?;
         Ok(())
     }
 
@@ -226,7 +227,7 @@ where
     {
         self.writer.set_color(&self.theme.number)?;
         self.formatter.write_f32(&mut self.writer, value)?;
-        self.writer.reset()?;
+        self.writer.set_color(&self.theme.reset)?;
         Ok(())
     }
 
@@ -236,7 +237,7 @@ where
     {
         self.writer.set_color(&self.theme.number)?;
         self.formatter.write_f64(&mut self.writer, value)?;
-        self.writer.reset()?;
+        self.writer.set_color(&self.theme.reset)?;
         Ok(())
     }
 
@@ -246,7 +247,7 @@ where
     {
         self.writer.set_color(&self.theme.number)?;
         self.formatter.write_number_str(&mut self.writer, value)?;
-        self.writer.reset()?;
+        self.writer.set_color(&self.theme.reset)?;
         Ok(())
     }
 
@@ -266,7 +267,7 @@ where
     {
         self.formatter.end_string(&mut self.writer)?;
         if !self.writing_key {
-            self.writer.reset()?;
+            self.writer.set_color(&self.theme.reset)?;
         }
         Ok(())
     }
@@ -343,7 +344,7 @@ where
     where
         U: ?Sized + Write,
     {
-        self.writer.reset()?;
+        self.writer.set_color(&self.theme.reset)?;
         self.formatter.end_object_key(&mut self.writer)?;
         self.writing_key = false;
         Ok(())
@@ -437,12 +438,18 @@ where
 impl Theme {
     /// Create a theme with no styling.
     pub fn none() -> Self {
+        Theme::new(ColorSpec::new())
+    }
+
+    /// Create a theme where all text is printed using the given [`termcolor::ColorSpec`].
+    pub fn new(default: ColorSpec) -> Self {
         Theme {
-            null: ColorSpec::new(),
-            bool: ColorSpec::new(),
-            number: ColorSpec::new(),
-            string: ColorSpec::new(),
-            object_key: ColorSpec::new(),
+            reset: default.clone(),
+            null: default.clone(),
+            bool: default.clone(),
+            number: default.clone(),
+            string: default.clone(),
+            object_key: default.clone(),
         }
     }
 

@@ -1,3 +1,8 @@
+# 0.1.4
+
+- Add `Theme::new()` to controlling the default color specification.
+- Optimize color codes emitted for empty themes.
+
 # 0.1.2
 
 - Forward directly to `serde_json` if colors are not supported by the writer.

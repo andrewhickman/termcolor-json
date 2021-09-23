@@ -26,6 +26,7 @@
 use std::{
     cell::RefCell,
     io::{self, Write},
+    mem,
 };
 
 use serde::Serialize;
@@ -103,6 +104,7 @@ struct ColorFormatter<'a, W, F> {
     writer: W,
     theme: &'a Theme,
     writing_key: bool,
+    need_reset: bool,
 }
 
 impl<'a, W, F> ColorFormatter<'a, W, F> {
@@ -112,6 +114,7 @@ impl<'a, W, F> ColorFormatter<'a, W, F> {
             writer,
             theme,
             writing_key: false,
+            need_reset: false,
         }
     }
 }
@@ -125,130 +128,130 @@ where
     where
         U: ?Sized + Write,
     {
-        self.writer.set_color(&self.theme.null)?;
-        self.formatter.write_null(&mut self.writer)?;
-        self.writer.set_color(&self.theme.reset)?;
-        Ok(())
+        let f = &mut self.formatter;
+        with_color(&mut self.writer, &self.theme.null, &self.theme, |w| {
+            f.write_null(w)
+        })
     }
 
     fn write_bool<U>(&mut self, _: &mut U, value: bool) -> io::Result<()>
     where
         U: ?Sized + Write,
     {
-        self.writer.set_color(&self.theme.bool)?;
-        self.formatter.write_bool(&mut self.writer, value)?;
-        self.writer.set_color(&self.theme.reset)?;
-        Ok(())
+        let f = &mut self.formatter;
+        with_color(&mut self.writer, &self.theme.bool, &self.theme, |w| {
+            f.write_bool(w, value)
+        })
     }
 
     fn write_i8<U>(&mut self, _: &mut U, value: i8) -> io::Result<()>
     where
         U: ?Sized + Write,
     {
-        self.writer.set_color(&self.theme.number)?;
-        self.formatter.write_i8(&mut self.writer, value)?;
-        self.writer.set_color(&self.theme.reset)?;
-        Ok(())
+        let f = &mut self.formatter;
+        with_color(&mut self.writer, &self.theme.number, &self.theme, |w| {
+            f.write_i8(w, value)
+        })
     }
 
     fn write_i16<U>(&mut self, _: &mut U, value: i16) -> io::Result<()>
     where
         U: ?Sized + Write,
     {
-        self.writer.set_color(&self.theme.number)?;
-        self.formatter.write_i16(&mut self.writer, value)?;
-        self.writer.set_color(&self.theme.reset)?;
-        Ok(())
+        let f = &mut self.formatter;
+        with_color(&mut self.writer, &self.theme.number, &self.theme, |w| {
+            f.write_i16(w, value)
+        })
     }
 
     fn write_i32<U>(&mut self, _: &mut U, value: i32) -> io::Result<()>
     where
         U: ?Sized + Write,
     {
-        self.writer.set_color(&self.theme.number)?;
-        self.formatter.write_i32(&mut self.writer, value)?;
-        self.writer.set_color(&self.theme.reset)?;
-        Ok(())
+        let f = &mut self.formatter;
+        with_color(&mut self.writer, &self.theme.number, &self.theme, |w| {
+            f.write_i32(w, value)
+        })
     }
 
     fn write_i64<U>(&mut self, _: &mut U, value: i64) -> io::Result<()>
     where
         U: ?Sized + Write,
     {
-        self.writer.set_color(&self.theme.number)?;
-        self.formatter.write_i64(&mut self.writer, value)?;
-        self.writer.set_color(&self.theme.reset)?;
-        Ok(())
+        let f = &mut self.formatter;
+        with_color(&mut self.writer, &self.theme.number, &self.theme, |w| {
+            f.write_i64(w, value)
+        })
     }
 
     fn write_u8<U>(&mut self, _: &mut U, value: u8) -> io::Result<()>
     where
         U: ?Sized + Write,
     {
-        self.writer.set_color(&self.theme.number)?;
-        self.formatter.write_u8(&mut self.writer, value)?;
-        self.writer.set_color(&self.theme.reset)?;
-        Ok(())
+        let f = &mut self.formatter;
+        with_color(&mut self.writer, &self.theme.number, &self.theme, |w| {
+            f.write_u8(w, value)
+        })
     }
 
     fn write_u16<U>(&mut self, _: &mut U, value: u16) -> io::Result<()>
     where
         U: ?Sized + Write,
     {
-        self.writer.set_color(&self.theme.number)?;
-        self.formatter.write_u16(&mut self.writer, value)?;
-        self.writer.set_color(&self.theme.reset)?;
-        Ok(())
+        let f = &mut self.formatter;
+        with_color(&mut self.writer, &self.theme.number, &self.theme, |w| {
+            f.write_u16(w, value)
+        })
     }
 
     fn write_u32<U>(&mut self, _: &mut U, value: u32) -> io::Result<()>
     where
         U: ?Sized + Write,
     {
-        self.writer.set_color(&self.theme.number)?;
-        self.formatter.write_u32(&mut self.writer, value)?;
-        self.writer.set_color(&self.theme.reset)?;
-        Ok(())
+        let f = &mut self.formatter;
+        with_color(&mut self.writer, &self.theme.number, &self.theme, |w| {
+            f.write_u32(w, value)
+        })
     }
 
     fn write_u64<U>(&mut self, _: &mut U, value: u64) -> io::Result<()>
     where
         U: ?Sized + Write,
     {
-        self.writer.set_color(&self.theme.number)?;
-        self.formatter.write_u64(&mut self.writer, value)?;
-        self.writer.set_color(&self.theme.reset)?;
-        Ok(())
+        let f = &mut self.formatter;
+        with_color(&mut self.writer, &self.theme.number, &self.theme, |w| {
+            f.write_u64(w, value)
+        })
     }
 
     fn write_f32<U>(&mut self, _: &mut U, value: f32) -> io::Result<()>
     where
         U: ?Sized + Write,
     {
-        self.writer.set_color(&self.theme.number)?;
-        self.formatter.write_f32(&mut self.writer, value)?;
-        self.writer.set_color(&self.theme.reset)?;
-        Ok(())
+        let f = &mut self.formatter;
+        with_color(&mut self.writer, &self.theme.number, &self.theme, |w| {
+            f.write_f32(w, value)
+        })
     }
 
     fn write_f64<U>(&mut self, _: &mut U, value: f64) -> io::Result<()>
     where
         U: ?Sized + Write,
     {
-        self.writer.set_color(&self.theme.number)?;
-        self.formatter.write_f64(&mut self.writer, value)?;
-        self.writer.set_color(&self.theme.reset)?;
-        Ok(())
+        let f = &mut self.formatter;
+        with_color(&mut self.writer, &self.theme.number, &self.theme, |w| {
+            f.write_f64(w, value)
+        })
     }
 
     fn write_number_str<U>(&mut self, _: &mut U, value: &str) -> io::Result<()>
     where
         U: ?Sized + Write,
     {
-        self.writer.set_color(&self.theme.number)?;
-        self.formatter.write_number_str(&mut self.writer, value)?;
-        self.writer.set_color(&self.theme.reset)?;
-        Ok(())
+        let f = &mut self.formatter;
+        with_color(&mut self.writer, &self.theme.number, &self.theme, |w| {
+            f.write_number_str(w, value)
+        })
     }
 
     fn begin_string<U>(&mut self, _: &mut U) -> io::Result<()>
@@ -256,7 +259,7 @@ where
         U: ?Sized + Write,
     {
         if !self.writing_key {
-            self.writer.set_color(&self.theme.string)?;
+            self.need_reset = set_color(&mut self.writer, &self.theme.string)?;
         }
         self.formatter.begin_string(&mut self.writer)
     }
@@ -266,8 +269,8 @@ where
         U: ?Sized + Write,
     {
         self.formatter.end_string(&mut self.writer)?;
-        if !self.writing_key {
-            self.writer.set_color(&self.theme.reset)?;
+        if !self.writing_key && mem::take(&mut self.need_reset) {
+            reset(&mut self.writer, &self.theme)?;
         }
         Ok(())
     }
@@ -336,7 +339,7 @@ where
     {
         self.writing_key = true;
         self.formatter.begin_object_key(&mut self.writer, first)?;
-        self.writer.set_color(&self.theme.object_key)?;
+        self.need_reset = set_color(&mut self.writer, &self.theme.object_key)?;
         Ok(())
     }
 
@@ -344,7 +347,9 @@ where
     where
         U: ?Sized + Write,
     {
-        self.writer.set_color(&self.theme.reset)?;
+        if mem::take(&mut self.need_reset) {
+            reset(&mut self.writer, &self.theme)?;
+        }
         self.formatter.end_object_key(&mut self.writer)?;
         self.writing_key = false;
         Ok(())
@@ -370,6 +375,39 @@ where
     {
         self.formatter
             .write_raw_fragment(&mut self.writer, fragment)
+    }
+}
+
+fn set_color<W>(writer: &mut W, color: &ColorSpec) -> io::Result<bool>
+where
+    W: WriteColor,
+{
+    if color.is_none() {
+        Ok(false)
+    } else {
+        writer.set_color(color)?;
+        Ok(true)
+    }
+}
+
+fn reset<W>(writer: &mut W, theme: &Theme) -> io::Result<()>
+where
+    W: WriteColor,
+{
+    writer.set_color(&theme.reset)
+}
+
+fn with_color<W, F>(writer: &mut W, color: &ColorSpec, theme: &Theme, write: F) -> io::Result<()>
+where
+    W: WriteColor,
+    F: FnOnce(&mut W) -> io::Result<()>,
+{
+    if set_color(writer, color)? {
+        write(writer)?;
+        reset(writer, theme)?;
+        Ok(())
+    } else {
+        write(writer)
     }
 }
 

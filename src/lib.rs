@@ -129,7 +129,7 @@ where
         U: ?Sized + Write,
     {
         let f = &mut self.formatter;
-        with_color(&mut self.writer, &self.theme.null, &self.theme, |w| {
+        with_color(&mut self.writer, &self.theme.null, self.theme, |w| {
             f.write_null(w)
         })
     }
@@ -139,7 +139,7 @@ where
         U: ?Sized + Write,
     {
         let f = &mut self.formatter;
-        with_color(&mut self.writer, &self.theme.bool, &self.theme, |w| {
+        with_color(&mut self.writer, &self.theme.bool, self.theme, |w| {
             f.write_bool(w, value)
         })
     }
@@ -149,7 +149,7 @@ where
         U: ?Sized + Write,
     {
         let f = &mut self.formatter;
-        with_color(&mut self.writer, &self.theme.number, &self.theme, |w| {
+        with_color(&mut self.writer, &self.theme.number, self.theme, |w| {
             f.write_i8(w, value)
         })
     }
@@ -159,7 +159,7 @@ where
         U: ?Sized + Write,
     {
         let f = &mut self.formatter;
-        with_color(&mut self.writer, &self.theme.number, &self.theme, |w| {
+        with_color(&mut self.writer, &self.theme.number, self.theme, |w| {
             f.write_i16(w, value)
         })
     }
@@ -169,7 +169,7 @@ where
         U: ?Sized + Write,
     {
         let f = &mut self.formatter;
-        with_color(&mut self.writer, &self.theme.number, &self.theme, |w| {
+        with_color(&mut self.writer, &self.theme.number, self.theme, |w| {
             f.write_i32(w, value)
         })
     }
@@ -179,7 +179,7 @@ where
         U: ?Sized + Write,
     {
         let f = &mut self.formatter;
-        with_color(&mut self.writer, &self.theme.number, &self.theme, |w| {
+        with_color(&mut self.writer, &self.theme.number, self.theme, |w| {
             f.write_i64(w, value)
         })
     }
@@ -189,7 +189,7 @@ where
         U: ?Sized + Write,
     {
         let f = &mut self.formatter;
-        with_color(&mut self.writer, &self.theme.number, &self.theme, |w| {
+        with_color(&mut self.writer, &self.theme.number, self.theme, |w| {
             f.write_u8(w, value)
         })
     }
@@ -199,7 +199,7 @@ where
         U: ?Sized + Write,
     {
         let f = &mut self.formatter;
-        with_color(&mut self.writer, &self.theme.number, &self.theme, |w| {
+        with_color(&mut self.writer, &self.theme.number, self.theme, |w| {
             f.write_u16(w, value)
         })
     }
@@ -209,7 +209,7 @@ where
         U: ?Sized + Write,
     {
         let f = &mut self.formatter;
-        with_color(&mut self.writer, &self.theme.number, &self.theme, |w| {
+        with_color(&mut self.writer, &self.theme.number, self.theme, |w| {
             f.write_u32(w, value)
         })
     }
@@ -219,7 +219,7 @@ where
         U: ?Sized + Write,
     {
         let f = &mut self.formatter;
-        with_color(&mut self.writer, &self.theme.number, &self.theme, |w| {
+        with_color(&mut self.writer, &self.theme.number, self.theme, |w| {
             f.write_u64(w, value)
         })
     }
@@ -229,7 +229,7 @@ where
         U: ?Sized + Write,
     {
         let f = &mut self.formatter;
-        with_color(&mut self.writer, &self.theme.number, &self.theme, |w| {
+        with_color(&mut self.writer, &self.theme.number, self.theme, |w| {
             f.write_f32(w, value)
         })
     }
@@ -239,7 +239,7 @@ where
         U: ?Sized + Write,
     {
         let f = &mut self.formatter;
-        with_color(&mut self.writer, &self.theme.number, &self.theme, |w| {
+        with_color(&mut self.writer, &self.theme.number, self.theme, |w| {
             f.write_f64(w, value)
         })
     }
@@ -249,7 +249,7 @@ where
         U: ?Sized + Write,
     {
         let f = &mut self.formatter;
-        with_color(&mut self.writer, &self.theme.number, &self.theme, |w| {
+        with_color(&mut self.writer, &self.theme.number, self.theme, |w| {
             f.write_number_str(w, value)
         })
     }
@@ -270,7 +270,7 @@ where
     {
         self.formatter.end_string(&mut self.writer)?;
         if !self.writing_key && mem::take(&mut self.need_reset) {
-            reset(&mut self.writer, &self.theme)?;
+            reset(&mut self.writer, self.theme)?;
         }
         Ok(())
     }
@@ -348,7 +348,7 @@ where
         U: ?Sized + Write,
     {
         if mem::take(&mut self.need_reset) {
-            reset(&mut self.writer, &self.theme)?;
+            reset(&mut self.writer, self.theme)?;
         }
         self.formatter.end_object_key(&mut self.writer)?;
         self.writing_key = false;
@@ -487,7 +487,7 @@ impl Theme {
             bool: default.clone(),
             number: default.clone(),
             string: default.clone(),
-            object_key: default.clone(),
+            object_key: default,
         }
     }
 

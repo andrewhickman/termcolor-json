@@ -563,3 +563,94 @@ impl Default for Theme {
         theme
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn data() -> impl Serialize {
+        serde_json::json!({
+            "b": true,
+            "n": null,
+            "m": 1,
+            "s": "v",
+        })
+    }
+
+    fn to_readable_string(vec: Vec<u8>) -> String {
+        String::from_utf8_lossy(&vec)
+            .replace('\x1B', "^[")
+    }
+
+    #[test]
+    fn no_color_passthrough() {
+        use termcolor::NoColor;
+
+        let mut buf = Vec::new();
+        let writer = NoColor::new(io::Cursor::new(&mut buf));
+
+        to_writer(writer, &data()).unwrap();
+
+        assert_eq!(to_readable_string(buf).as_str(), "{\n  \"b\": true,\n  \"m\": 1,\n  \"n\": null,\n  \"s\": \"v\"\n}");
+    }
+
+    #[test]
+    fn no_color_passthrough_compact() {
+        use termcolor::NoColor;
+
+        let mut buf = Vec::new();
+        let writer = NoColor::new(io::Cursor::new(&mut buf));
+
+        to_writer_compact(writer, &data()).unwrap();
+
+        assert_eq!(to_readable_string(buf).as_str(), "{\"b\":true,\"m\":1,\"n\":null,\"s\":\"v\"}");
+    }
+
+    #[test]
+    fn ansi_empty_theme_passthrough() {
+        use termcolor::Ansi;
+
+        let mut buf = Vec::new();
+        let writer = Ansi::new(io::Cursor::new(&mut buf));
+
+        to_writer_with_theme(writer, &data(), &Theme::none()).unwrap();
+
+        assert_eq!(to_readable_string(buf).as_str(), "{\n  \"b\": true,\n  \"m\": 1,\n  \"n\": null,\n  \"s\": \"v\"\n}");
+    }
+
+    #[test]
+    fn ansi_empty_theme_passthrough_compact() {
+        use termcolor::Ansi;
+
+        let mut buf = Vec::new();
+        let writer = Ansi::new(io::Cursor::new(&mut buf));
+
+        to_writer_with_theme_and_formatter(writer, &data(), &Theme::none(), CompactFormatter).unwrap();
+
+        assert_eq!(to_readable_string(buf).as_str(), "{\"b\":true,\"m\":1,\"n\":null,\"s\":\"v\"}");
+    }
+
+    #[test]
+    fn ansi_default_theme() {
+        use termcolor::Ansi;
+
+        let mut buf = Vec::new();
+        let writer = Ansi::new(io::Cursor::new(&mut buf));
+
+        to_writer(writer, &data()).unwrap();
+
+        assert_eq!(to_readable_string(buf).as_str(), "{\n  ^[[0m^[[38;5;12m\"b\"^[[0m: ^[[0m^[[1m^[[36mtrue^[[0m,\n  ^[[0m^[[38;5;12m\"m\"^[[0m: ^[[0m^[[36m1^[[0m,\n  ^[[0m^[[38;5;12m\"n\"^[[0m: ^[[0m^[[1m^[[36mnull^[[0m,\n  ^[[0m^[[38;5;12m\"s\"^[[0m: ^[[0m^[[32m\"v\"^[[0m\n}");
+    }
+
+    #[test]
+    fn ansi_default_theme_compact() {
+        use termcolor::Ansi;
+
+        let mut buf = Vec::new();
+        let writer = Ansi::new(io::Cursor::new(&mut buf));
+
+        to_writer_compact(writer, &data()).unwrap();
+
+        assert_eq!(to_readable_string(buf).as_str(), "{^[[0m^[[38;5;12m\"b\"^[[0m:^[[0m^[[1m^[[36mtrue^[[0m,^[[0m^[[38;5;12m\"m\"^[[0m:^[[0m^[[36m1^[[0m,^[[0m^[[38;5;12m\"n\"^[[0m:^[[0m^[[1m^[[36mnull^[[0m,^[[0m^[[38;5;12m\"s\"^[[0m:^[[0m^[[32m\"v\"^[[0m}");
+    }
+}

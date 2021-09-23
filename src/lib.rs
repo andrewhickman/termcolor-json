@@ -578,8 +578,7 @@ mod tests {
     }
 
     fn to_readable_string(vec: Vec<u8>) -> String {
-        String::from_utf8_lossy(&vec)
-            .replace('\x1B', "^[")
+        String::from_utf8_lossy(&vec).replace('\x1B', "^[")
     }
 
     #[test]
@@ -591,7 +590,10 @@ mod tests {
 
         to_writer(writer, &data()).unwrap();
 
-        assert_eq!(to_readable_string(buf).as_str(), "{\n  \"b\": true,\n  \"m\": 1,\n  \"n\": null,\n  \"s\": \"v\"\n}");
+        assert_eq!(
+            to_readable_string(buf).as_str(),
+            "{\n  \"b\": true,\n  \"m\": 1,\n  \"n\": null,\n  \"s\": \"v\"\n}"
+        );
     }
 
     #[test]
@@ -603,7 +605,10 @@ mod tests {
 
         to_writer_compact(writer, &data()).unwrap();
 
-        assert_eq!(to_readable_string(buf).as_str(), "{\"b\":true,\"m\":1,\"n\":null,\"s\":\"v\"}");
+        assert_eq!(
+            to_readable_string(buf).as_str(),
+            "{\"b\":true,\"m\":1,\"n\":null,\"s\":\"v\"}"
+        );
     }
 
     #[test]
@@ -615,7 +620,10 @@ mod tests {
 
         to_writer_with_theme(writer, &data(), &Theme::none()).unwrap();
 
-        assert_eq!(to_readable_string(buf).as_str(), "{\n  \"b\": true,\n  \"m\": 1,\n  \"n\": null,\n  \"s\": \"v\"\n}");
+        assert_eq!(
+            to_readable_string(buf).as_str(),
+            "{\n  \"b\": true,\n  \"m\": 1,\n  \"n\": null,\n  \"s\": \"v\"\n}"
+        );
     }
 
     #[test]
@@ -625,9 +633,13 @@ mod tests {
         let mut buf = Vec::new();
         let writer = Ansi::new(io::Cursor::new(&mut buf));
 
-        to_writer_with_theme_and_formatter(writer, &data(), &Theme::none(), CompactFormatter).unwrap();
+        to_writer_with_theme_and_formatter(writer, &data(), &Theme::none(), CompactFormatter)
+            .unwrap();
 
-        assert_eq!(to_readable_string(buf).as_str(), "{\"b\":true,\"m\":1,\"n\":null,\"s\":\"v\"}");
+        assert_eq!(
+            to_readable_string(buf).as_str(),
+            "{\"b\":true,\"m\":1,\"n\":null,\"s\":\"v\"}"
+        );
     }
 
     #[test]

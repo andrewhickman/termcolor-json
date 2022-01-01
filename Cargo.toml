@@ -1,7 +1,7 @@
 [package]
 name = "termcolor-json"
 description = "A library for writing colored JSON output to a termcolor terminal."
-version = "0.1.4"
+version = "1.0.0"
 authors = ["Andrew Hickman <andrew.hickman1@sky.com>"]
 include = ["src/**/*", "Cargo.toml", "README.md"]
 repository = "https://github.com/andrewhickman/termcolor-json"

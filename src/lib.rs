@@ -1,6 +1,6 @@
 #![deny(missing_debug_implementations)]
 #![deny(missing_docs)]
-#![doc(html_root_url = "https://docs.rs/termcolor-json/0.1.3")]
+#![doc(html_root_url = "https://docs.rs/termcolor-json/1.0.0")]
 
 //! A library for writing colored [JSON](https://crates.io/crates/serde_json) output to a [termcolor](https://crates.io/crates/termcolor) terminal.
 //!

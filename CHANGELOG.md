@@ -1,3 +1,7 @@
+# 1.0.0
+
+- No changes since 0.1.4
+
 # 0.1.4
 
 - Add `Theme::new()` to controlling the default color specification.

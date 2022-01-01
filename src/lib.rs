@@ -479,7 +479,7 @@ impl Theme {
         Theme::new(ColorSpec::new())
     }
 
-    /// Create a theme where all text is printed using the given [`termcolor::ColorSpec`].
+    /// Create a theme where all text is printed using the given [`ColorSpec`].
     pub fn new(default: ColorSpec) -> Self {
         Theme {
             reset: default.clone(),
@@ -523,14 +523,14 @@ impl Theme {
 
     /// Gets a mutable reference to the color specification for string tokens.
     ///
-    /// Note this is not used for object keys, which are controlled by the [Theme::object_key] field.
+    /// Note this is not used for object keys, which are controlled by the [`object_key`][Theme::object_key] field.
     pub fn string(&self) -> &ColorSpec {
         &self.string
     }
 
     /// Gets a mutable reference to the color specification for string tokens.
     ///
-    /// Note this is not used for object keys, which are controlled by the [Theme::object_key_mut] field.
+    /// Note this is not used for object keys, which are controlled by the [`object_key_mut`][Theme::object_key_mut] field.
     pub fn string_mut(&mut self) -> &mut ColorSpec {
         &mut self.string
     }
